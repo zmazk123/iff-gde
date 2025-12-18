@@ -121,11 +121,13 @@ I documented minor decision I took along the way using DBT docs. You can explore
 
 ## Tests
 
-We can write tests directly in DBT. You will notice that some tests fail! That's ok - it means they are doing their job. 
+We can write tests directly in DBT. 
 
-For exaple a [relationship](https://docs.getdbt.com/reference/resource-properties/data-tests#relationships) test between Ingredients and Providers fail because we have some ingredients that have a provider_id that does not exist in Providers. With this info we can research the issue upstream.
+You will notice that some tests fail! That's ok - it means they are doing their job. 
 
-Another example is a uniqueness test on Provider Inventory. We specified the grain of ingredient X provider. But the test found some cases where that is not true. So we have a duplication. Same ingredient from same provider in the same batch. Which row is correct? This indicates a data smell we should look into. (Ingredient ids: 374 and 390)
+For exaple a [relationship](https://docs.getdbt.com/reference/resource-properties/data-tests#relationships) test between Ingredients and Providers fails, because we have some ingredients that have a provider_id that does not exist in Providers. With this info, we can research the issue upstream.
+
+Another example is a uniqueness test on Provider Inventory. We specified the grain of ingredient X provider. But the test found some cases where that is not true. So we have a duplication. Same ingredient from same provider in the same batch. Which row is correct? This indicates a data smell, we should look into. (Ingredient ids: 374 and 390)
 
 However in the scope of this project I will not be identifying the source of the issue or applying a fix.
 
@@ -136,6 +138,6 @@ There is a lot of work to be done:
  - Add dbt [sources](https://docs.getdbt.com/docs/build/sources) to document and test the source tables.
  - Identify any potential logic or data duplication and clean up the code.
  - Add more extensive documentation.
- - Run dbt commands on a schedule using something like Airflow.
+ - Run dbt commands on a schedule, using something like Airflow.
  - Add more elaborate tests and add more tests to the gold layer.
 
