@@ -25,7 +25,9 @@ Instructions for running the code.
 
 1) Clone the repository: `git clone https://github.com/zmazk123/iff-gde.git`
 
-2) Run: `docker compose up`
+2) Make sure you are in the project folder: `cd iff-gde`
+
+3) Run: `docker compose up`
 
 This will seed the database from the csv files, run the transformations and tests and spin up dbt documentation server at http://localhost:8001.
 
@@ -33,9 +35,9 @@ Wait for the process to finish (some tests fail - that is fine). A .duckdb file 
 
 Now we need to spin up [DuckDB UI](https://duckdb.org/docs/stable/operations_manual/duckdb_docker) so that we can query the database.
 
-3) Run `docker run --rm -it -v "./duckdb_data:/workspace" -w /workspace --net host duckdb/duckdb`
+4) Run (make sure you are in the project folder /iff-gde): `docker run --rm -it -v "./duckdb_data:/workspace" -w /workspace --net host duckdb/duckdb`
 
-4) In container we have duckdb CLI and run: `ATTACH '/workspace/dev.duckdb';`
+5) In container we have duckdb CLI and run: `ATTACH '/workspace/dev.duckdb';`
 
 5) In container duckdb CLI run: `CALL start_ui();`
 
