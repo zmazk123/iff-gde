@@ -99,7 +99,7 @@ I also linked Providers with Recipes using a surrogate key to maintain a star sc
 
 ### Unpivoting recipes
 
-Given more information and time we should also unpivot Recipes. For now a recipe has ingredient, flavour and raw_material. But what if we required more fields in the future to make a recipe for example water? If we keep adding them the table blows up.
+Given more information and time, we should also unpivot Recipes. For now a recipe has ingredient, flavour and raw_material. But what if we required more fields in the future to make a recipe, for example water? If we keep adding them, the table blows up.
 
 In that case it would make sense to format recipes like:
 
