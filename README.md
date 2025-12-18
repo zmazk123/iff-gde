@@ -141,3 +141,7 @@ There is a lot of work to be done:
  - Run dbt commands on a schedule, using something like Airflow.
  - Add more elaborate tests and add more tests to the gold layer.
 
+## Note regarding LLM tools
+
+LLM's can be useful for tasks like refactoring, code explanation, simple code generation or as a sparing partner for new ideas. However anything that such tools produce must be reviewed. I belive you shoud only use LLM's when you already know what you want to do and have a solid understanding on a given topic. If used correctly they can speed up development as you don't need to type everything manually. Still I belive that the developer is responsible for the commited code - not LLM's.
+
