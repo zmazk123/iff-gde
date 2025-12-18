@@ -97,6 +97,10 @@ The reason for that is that I noticed that some ingredients are the same. For a 
 
 I also linked Providers with Recipes using a surrogate key to maintain a star schema.
 
+### Flavours history
+
+I deduplicated rows(keeping the latest batch) in all tables except Flavours History, used to track flavour description changed. For this slowly changing dimension I decided to take the history table approach.
+
 ### Unpivoting recipes
 
 Given more information and time, we should also unpivot Recipes. For now a recipe has ingredient, flavour and raw_material. But what if we required more fields in the future to make a recipe, for example water? If we keep adding them, the table blows up.
