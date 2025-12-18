@@ -1,0 +1,267 @@
+models:
+  - name: stg_customers
+    description: "A cleaned up latest customers data. Added surrogate key computed on customer_id."
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        data_tests:
+          - not_null
+      - name: location_city
+        data_tests:
+          - not_null
+      - name: location_country
+        data_tests:
+          - accepted_values:
+              arguments:
+                # Just a demo for testing valid countries. In real scenario we should more(all) countries with their respestictive codes, to not mix up things like UK-United Kingdom
+                values: ['Norway','Ireland','Hungary','Denmark','China','Canada','France','Poland','Finland','South Korea','Italy','Brazil','Kenya','Australia','Greece','Austria','UK','USA','Sweden','Romania','Singapore','Portugal','India','Germany','Czech Republic','Spain','Japan','Netherlands','Russia','UAE','South Africa','Switzerland','Israel']
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null
+
+  - name: stg_flavours
+    description: "A cleaned up latest flavours data. Added surrogate key computed on flavour_id and batch_number."
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        data_tests:
+          - not_null
+      - name: description
+        data_tests:
+          - not_null
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null
+
+  - name: stg_flavours_history
+    description: "A cleaned up flavours data. Contains data from all batches for tracking changes. Added surrogate key computed on flavour_id and batch_number."
+    columns:
+      - name: id
+        data_tests:
+          - not_null
+      - name: flavour_sk
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        data_tests:
+          - not_null
+      - name: description
+        data_tests:
+          - not_null
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null
+
+  - name: stg_ingredients
+    description: "This entity actually contains data on ingredients and their respective providers. Same ingredient can have the multiple providers, so we create a new dimension with the surrogate key: name X chemical_formula to identify distinct ingredients."
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        data_tests:
+          - not_null
+      - name: chemical_formula
+        data_tests:
+          - not_null
+      - name: weight_in_grams
+        data_tests:
+          - not_null
+          - positive_number
+      - name: cost_per_gram
+        data_tests:
+          - not_null
+          - positive_number
+      # Fails because we have ingredients with providers that dont exist
+      - name: fk_provider_id
+        description: "References provider. Relationships test can fail because we have ingredients with providers that don't exist."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_providers')
+                field: id
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null
+
+  - name: stg_providers
+    description: "A cleaned up latest provider data. Added surrogate key computed on provider_id."
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        data_tests:
+          - not_null
+      - name: location_city
+        data_tests:
+          - not_null
+        # We should add more rigorous test for country/city, to ensure a valid entry, but ok for demo project
+      - name: location_country
+        data_tests:
+          - not_null
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null
+
+  - name: stg_raw_materials
+    description: "A cleaned up latest raw_material data. Added surrogate key computed on raw_materials_id."
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: name
+        data_tests:
+          - not_null
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null
+
+  - name: stg_recipes
+    description: >
+      A cleaned up latest recipes data. Injected surrogate keys for raw_material, flavour, ingredient and provider to maintain a start schema.
+      All raw_material, flavour and ingredient ratios must add up to 100%, which we test with assert_recipe_ratios_sum_to_one.sql
+    
+    columns:
+    # We could add more rigorous test for this ID, for example has to have 4 characters
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: fk_raw_material_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_raw_materials')
+                field: id
+      - name: raw_material_ratio
+        data_tests:
+          - not_null
+          - is_ratio
+      - name: fk_flavour_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_flavours')
+                field: id
+      - name: flavour_ratio
+        data_tests:
+          - not_null
+          - is_ratio
+      # Fails because we have recipes with ingredients that dont exist
+      - name: fk_ingredient_id
+        description: "References ingredient. Relationships test can fail because we have recepies with ingredients that don't exist."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_ingredients')
+                field: id
+      - name: ingredient_ratio
+        data_tests:
+          - not_null
+          - is_ratio
+      - name: yield
+        data_tests:
+          - not_null
+          - is_ratio
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null
+      # Failing as some recepies dont have ingredients
+      - name: ingredient_sk
+        data_tests:
+          - not_null
+      # Failing as some recepies dont have ingredients with providers
+      - name: provider_sk
+        data_tests:
+          - not_null
+      - name: raw_material_sk
+        data_tests:
+          - not_null
+      - name: flavour_sk
+        data_tests:
+          - not_null
+
+  - name: stg_sales_trasactions
+    description: "A cleaned up latest sales transactions data. Injected surrogate keys for flavour and customer to maintain a start schema."
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: fk_customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: id
+      - name: fk_flavour_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_flavours')
+                field: id
+      - name: quantity_liters
+        data_tests:
+          - not_null
+          - positive_number
+      - name: transaction_date
+        data_tests:
+          - not_null
+      # Again, we should probably add more rigorous tests to ensure the entered values are OK
+      - name: transaction_country
+        data_tests:
+          - not_null
+      - name: transaction_town
+        data_tests:
+          - not_null
+      - name: postal_code
+        data_tests:
+          - not_null
+      - name: amount_dollar
+        data_tests:
+          - not_null
+          - positive_number
+      - name: generation_date
+        data_tests:
+          - not_null
+      - name: batch_number
+        data_tests:
+          - not_null

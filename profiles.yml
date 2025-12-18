@@ -1,0 +1,7 @@
+iff:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: 'duckdb_data/dev.duckdb'
+      threads: 24

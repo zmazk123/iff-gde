@@ -1,0 +1,12 @@
+models:
+  - name: dim_ingredients
+    description: "A dim table derived from stg_ingredients. Should contain uniqe ingredients from stg_ingredients. We identify uniqe ingredients by a combined key name+chemical_formula. Without domain knowledge I assume that ingredients can have same the formula and vice versa."
+
+  - name: dim_flavours_history
+    description: "Dim table derived from stg_flavours_history."
+
+  - name: dim_flavours
+    description: "Dim table derived from stg_flavours"
+
+  - name: dim_providers
+    description: "Dim table derived from stg_providers"

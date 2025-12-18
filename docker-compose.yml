@@ -1,0 +1,19 @@
+services:
+  dbt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dbt_runner
+    volumes:
+      - ./duckdb_data:/app/iff/duckdb_data
+    ports:
+      - "8001:8001"
+    network_mode: host
+    command: >
+      bash -c "
+        dbt seed &&
+        dbt run &&
+        dbt test || true &&
+        dbt docs generate &&
+        dbt docs serve --port 8001
+      "

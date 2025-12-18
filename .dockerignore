@@ -1,0 +1,4 @@
+target/
+duckdb_data/dev.duckdb
+logs/
+.git/

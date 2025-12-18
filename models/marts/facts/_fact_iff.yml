@@ -1,0 +1,18 @@
+models:
+  - name: fact_provider_inventory
+    description: "A fact table derived from stg_ingredients. Grain should be ingredient X provider. We compute a new value inventory_value to have a ready metric for analytics."
+    tests:
+        # The chosen grain is provider X ingredient. Failing test means that there are duplicate values for the grain. Since it all came in 1 batch, this denotes an issue in the data downstream!
+      - unique:
+          column_name: "provider_sk || '-' || ingredient_sk"
+    columns:
+      - name: inventory_value
+        data_tests:
+          - not_null
+          - positive_number
+
+  - name: fact_recipes
+    description: "Fact table derived from recipes."
+    
+  - name: fact_sales_transactions
+    description: "Fact table derived from sales transactions."

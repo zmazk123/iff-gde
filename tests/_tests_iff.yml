@@ -1,0 +1,4 @@
+
+data_tests:
+  - name: assert_recipe_ratios_sum_to_one
+    description: "In recipes we need to make sure that all ratios of raw_material, flavour and ingredient add up to 100%."

@@ -1,0 +1,4 @@
+
+macros:
+  - name: deduplicate_latest_batch
+    description: "Data is arriving in multiple batches. With this macro we remove all duplicates while keeping the data from the latest bathc."
