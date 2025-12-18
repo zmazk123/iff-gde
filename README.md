@@ -63,6 +63,8 @@ If you are unable to setup with Docker you can spin it up locally.
 
 8) Run: `dbt docs serve --port 8001`
 
+9) Spin up DuckDB UI: `duckdb -ui`
+
 Now we should have a working setup.
 
 If you check the documentation at: http://localhost:8001 you should see:
